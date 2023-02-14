@@ -1,0 +1,35 @@
+<ng-container *ngFor="let product of basket; trackBy: trackById">
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <div class="d-flex mx-auto justify-content-between w-50">
+        <img src="{{ product.img }}" alt="Product image" width="75px" />
+        <div>
+          <h3>{{ product.name }}</h3>
+          <p>$ {{ product.price | number : "1.2" }}</p>
+        </div>
+        <button (click)="removeFromBasket(product)">Remove</button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<div class="row mb-3">
+  <div class="col-md-12">
+    <div class="mx-auto w-50 text-center">
+      TotalPrice: $ {{ totalPrice | number : "1.2" }}
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="mx-auto w-50 text-center">
+      <a
+        class="btn"
+        [class.btn-success]="basket.length"
+        [class.btn-secondary]="!basket.length"
+        [routerLink]="basket.length ? '/checkout' : null"
+      >
+        Checkout
+      </a>
+    </div>
+  </div>
+</div>

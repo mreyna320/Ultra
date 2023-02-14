@@ -1,0 +1,88 @@
+<div class="row">
+  <div class="col-md-12">
+    <ng-container
+      *ngIf="paymentSuccess; then successAlert; else paymentForm"
+    ></ng-container>
+
+    <ng-template #successAlert>
+      <div class="alert alert-success">Thank you for your purcharse</div>
+      <a class="btn btn-success" routerLink="">Buy more</a>
+    </ng-template>
+
+    <ng-template #paymentForm>
+      <form [formGroup]="form" (ngSubmit)="pay()">
+        <h3>FullName</h3>
+        <div class="row mb-3">
+          <div class="col">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="name"
+              aria-describedby="name input"
+              placeholder="Name"
+            />
+          </div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="lastname"
+              aria-describedby="lastname input"
+              placeholder="Lastname"
+            />
+          </div>
+        </div>
+
+        <h3>Address</h3>
+        <input
+          type="text"
+          class="form-control mb-3"
+          formControlName="street"
+          aria-describedby="street input"
+          placeholder="Street"
+        />
+
+        <div class="row mb-3">
+          <div class="col">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="city"
+              aria-describedby="city input"
+              placeholder="City"
+            />
+          </div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="state"
+              aria-describedby="state input"
+              placeholder="State"
+            />
+          </div>
+        </div>
+
+        <h3>E-mail</h3>
+        <input
+          type="email"
+          class="form-control mb-3"
+          formControlName="email"
+          aria-describedby="email input"
+        />
+
+        <div class="mb-3">Total Price: $ {{ totalPrice | number : "1.2" }}</div>
+
+        <button
+          type="submit"
+          class="btn"
+          [class.btn-success]="form.valid"
+          [class.btn-secondary]="form.invalid"
+          [disabled]="form.invalid"
+        >
+          Pay
+        </button>
+      </form>
+    </ng-template>
+  </div>
+</div>

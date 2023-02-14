@@ -1,0 +1,31 @@
+<div class="row">
+  <ng-container *ngFor="let product of products; trackBy: trackById">
+    <div class="col-md-3">
+      <div
+        class="card mb-2"
+        [ngClass]="{ 'text-white bg-success': product.inBasket }"
+      >
+        <img
+          class="card-img-top"
+          src="{{ product.img }}"
+          alt="Product image"
+          width="100px"
+        />
+        <div class="card-body">
+          <h3 class="card-title">{{ product.name }}</h3>
+          <p class="card-text">$ {{ product.price | number : "1.2" }}</p>
+        </div>
+        <a
+          *ngIf="!product.inBasket"
+          class="stretched-link"
+          href="#"
+          (click)="addProductToBasket(product)"
+        ></a>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="products.length === 0">
+    <div class="alert alert-warning">No more products available</div>
+  </ng-container>
+</div>
