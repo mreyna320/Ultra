@@ -3,7 +3,9 @@
     <div class="col-md-3">
       <div
         class="card mb-2"
-        [ngClass]="{ 'text-white bg-success': product.inBasket }"
+        [ngClass]="{
+          'text-white bg-success': product.id | isInArr : prodIdsInBasket
+        }"
       >
         <img
           class="card-img-top"
@@ -16,7 +18,7 @@
           <p class="card-text">$ {{ product.price | number : "1.2" }}</p>
         </div>
         <a
-          *ngIf="!product.inBasket"
+          *ngIf="!(product.id | isInArr : prodIdsInBasket)"
           class="stretched-link"
           href="#"
           (click)="addProductToBasket(product)"

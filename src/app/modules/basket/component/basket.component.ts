@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map, Observable, Subscription, tap } from 'rxjs';
+import { map, Subscription, tap } from 'rxjs';
 
 import * as fromApp from 'src/app/store/app.reducer';
-import * as marketplaceActions from 'src/app/store/marketplace/marketplace.actions';
+import * as basketActions from 'src/app/store/basket/basket.actions';
 import { Product } from 'src/app/models/product.model';
 
 @Component({
@@ -20,10 +20,10 @@ export class BasketComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = this.store
-      .select('marketplace')
+      .select('basket')
       .pipe(
-        map((marketplace) => {
-          return marketplace.basket;
+        map((state) => {
+          return state.basket;
         }),
         tap((basket) => {
           this.basket = basket;
@@ -42,6 +42,6 @@ export class BasketComponent implements OnInit, OnDestroy {
   }
 
   removeFromBasket(product: Product): void {
-    this.store.dispatch(marketplaceActions.RemoveProduct({ product }));
+    this.store.dispatch(basketActions.RemoveProduct({ product }));
   }
 }

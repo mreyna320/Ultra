@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map, Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import * as fromApp from 'src/app/store/app.reducer';
-import * as marketplaceActions from 'src/app/store/marketplace/marketplace.actions';
+import * as basketActions from 'src/app/store/basket/basket.actions';
 import { Product } from 'src/app/models/product.model';
 
 @Component({
@@ -12,21 +12,30 @@ import { Product } from 'src/app/models/product.model';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   products: Product[];
+  prodIdsInBasket: number[];
 
-  private subscription: Subscription;
+  private subscriptions: Subscription[];
 
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit(): void {
-    this.subscription = this.store
+    const a = this.store
       .select('marketplace')
-      .subscribe((marketplace) => {
-        this.products = marketplace.products;
+      .subscribe(({ products, boughtProdIds }) => {
+        this.products = products.filter((x) => !boughtProdIds.includes(x.id));
       });
+
+    const b = this.store
+      .select('basket')
+      .subscribe(
+        ({ basket }) => (this.prodIdsInBasket = basket.map((x) => x.id))
+      );
+
+    this.subscriptions = [a, b];
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscriptions.forEach((x) => x.unsubscribe());
   }
 
   trackById(index: number, product: Product): number {
@@ -34,6 +43,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   addProductToBasket(product: Product): void {
-    this.store.dispatch(marketplaceActions.AddProduct({ product }));
+    this.store.dispatch(basketActions.AddProduct({ product }));
   }
 }

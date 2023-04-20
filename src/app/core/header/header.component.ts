@@ -18,10 +18,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.storeSubscription = this.store
-      .select('marketplace')
-      .subscribe((marketPlace) => {
-        this.wallet = marketPlace.wallet;
-        this.basketCount = marketPlace.basket.length;
+      .select('basket')
+      .subscribe(({ basket, wallet }) => {
+        this.wallet = wallet;
+        this.basketCount = basket.length;
       });
   }
 

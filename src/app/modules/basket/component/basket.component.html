@@ -12,6 +12,17 @@
     </div>
   </div>
 </ng-container>
+
+<ng-container *ngIf="basket.length === 0">
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <div class="alert alert-warning">
+        <a routerLink="">Start adding products to your basket!</a>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
 <div class="row mb-3">
   <div class="col-md-12">
     <div class="mx-auto w-50 text-center">

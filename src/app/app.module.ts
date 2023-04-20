@@ -6,6 +6,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import * as fromApp from './store/app.reducer';
 import { MarketplaceEffects } from './store/marketplace/marketplace.effects';
+import { BasketEffects } from './store/basket/basket.effects';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
@@ -17,7 +18,7 @@ import { CoreModule } from './core/core.module';
     AppRoutingModule,
     CoreModule,
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([MarketplaceEffects]),
+    EffectsModule.forRoot([MarketplaceEffects, BasketEffects]),
     StoreDevtoolsModule.instrument(),
   ],
   providers: [],

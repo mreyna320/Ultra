@@ -1,19 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { map, Observable, Subscription, tap } from 'rxjs';
+import { Actions, ofType } from '@ngrx/effects';
+import { Subscription, tap } from 'rxjs';
 
 import * as fromApp from 'src/app/store/app.reducer';
-import * as marketplaceActions from 'src/app/store/marketplace/marketplace.actions';
+import * as basketActions from 'src/app/store/basket/basket.actions';
 import { Product } from 'src/app/models/product.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Client } from 'src/app/models/client.model';
-import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
+  wallet = 0;
   totalPrice = 0;
   basketProducts: Product[];
   form: FormGroup;
@@ -42,22 +43,19 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     const a = this.actions$
       .pipe(
-        ofType(marketplaceActions.CheckoutSuccess),
-        tap((data) => {
-          this.paymentSuccess = true;
-        })
+        ofType(basketActions.CheckoutSuccess),
+        tap((data) => (this.paymentSuccess = true))
       )
       .subscribe();
 
     const b = this.store
-      .select('marketplace')
+      .select('basket')
       .pipe(
-        map((marketplace) => {
-          return marketplace.basket;
-        }),
-        tap((basket) => {
+        tap(({ basket, wallet }) => {
           this.basketProducts = basket;
           this.totalPrice = basket.reduce((prev, curr) => prev + curr.price, 0);
+          this.wallet = wallet;
+          console.log(wallet, this.totalPrice);
         })
       )
       .subscribe();
@@ -74,10 +72,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.form.markAllAsTouched();
       return;
     }
+
     const clientData: Client = this.form.value;
 
     this.store.dispatch(
-      marketplaceActions.CheckoutStart({
+      basketActions.CheckoutStart({
         client: clientData,
         products: this.basketProducts,
       })

@@ -73,15 +73,22 @@
 
         <div class="mb-3">Total Price: $ {{ totalPrice | number : "1.2" }}</div>
 
-        <button
-          type="submit"
-          class="btn"
-          [class.btn-success]="form.valid"
-          [class.btn-secondary]="form.invalid"
-          [disabled]="form.invalid"
-        >
-          Pay
-        </button>
+        <ng-container *ngIf="wallet < totalPrice">
+          <div class="alert alert-warning">Not enough credit in wallet</div>
+        </ng-container>
+
+        <div class="mx-auto w-50 text-center">
+          <button
+            type="submit"
+            class="btn"
+            style="min-width: 100px;"
+            [class.btn-success]="form.valid"
+            [class.btn-secondary]="form.invalid"
+            [disabled]="form.invalid || wallet < totalPrice"
+          >
+            Pay
+          </button>
+        </div>
       </form>
     </ng-template>
   </div>

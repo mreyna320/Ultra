@@ -37,26 +37,17 @@ const PRODUCTS_MOCK: Product[] = [
     name: 'Caramelos',
     price: 28.75,
   },
+  {
+    id: 6,
+    img: 'https://m.media-amazon.com/images/I/515SWL+5eOL._AC_SX385_.jpg',
+    name: 'Caramelos',
+    price: 228.75,
+  },
 ];
 
 @Injectable()
 export class MarketplaceEffects {
   constructor(private actions$: Actions) {}
-
-  checkout = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(AppActions.CheckoutStart),
-        delay(1000),
-        mergeMap((checkoutAction) => {
-          return of(checkoutAction).pipe(
-            map(() => AppActions.CheckoutSuccess()),
-            catchError((err) => of(AppActions.CheckoutFail(err)))
-          );
-        })
-      ),
-    { dispatch: true }
-  );
 
   productsFetch = createEffect(
     () =>
@@ -66,7 +57,7 @@ export class MarketplaceEffects {
         mergeMap(() => {
           return of(null).pipe(
             map(() =>
-              AppActions.ProductsFetchSuccess({ products: PRODUCTS_MOCK })
+              AppActions.ProductsFetchSuccess({ products: PRODUCTS_MOCK, boughtProdIds:[] })
             ),
             catchError((err) => of(AppActions.ProductsFetchFail(err)))
           );
